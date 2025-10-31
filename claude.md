@@ -89,43 +89,43 @@ sitzplatzverwalter/
 
 ## Current Implementation Status
 
-- [x] **Phase 1: Architecture** ✓ Complete
+- [x] **Phase 1: Architecture** ✓ Complete (30 min)
   - ARCHITECTURE.md created with complete specifications
   - claude.md created (this file)
   - PROGRESS.md created
 
-- [ ] **Phase 2: Data Layer** (Next)
-  - Implement models: Seat, Room, Student, Assignment
-  - Implement DataManager (JSON I/O, backup)
-  - Implement LockManager (file locking)
-  - Implement UndoManager (undo/redo)
-  - Unit tests for data layer
+- [x] **Phase 2: Data Layer** ✓ Complete (45 min)
+  - ✓ Models: Seat, Room, Student, Assignment (models/)
+  - ✓ DataManager (JSON I/O, backup, validation)
+  - ✓ LockManager (file locking, stale lock detection)
+  - ✓ UndoManager (undo/redo, 50-state stack)
+  - ✓ Unit tests: 63 tests, 100% passing
 
-- [ ] **Phase 3: Business Logic**
-  - AssignmentEngine (seat assignment algorithm)
-  - Validator (business rule validation)
-  - PdfExporter (PDF generation)
-  - Logic tests
+- [x] **Phase 3: Business Logic** ✓ Complete (90 min)
+  - ✓ AssignmentEngine (intelligent seat assignment algorithm)
+  - ✓ Validator (business rule validation, conflict detection)
+  - ✓ PdfExporter (PDF reports with German text)
+  - ✓ Unit tests: 56 tests, 100% passing
+  - **Combined Phase 2+3:** 119 tests, 100% passing
 
-- [ ] **Phase 4: GUI Implementation**
-  - MainWindow with menu/toolbar/tabs
-  - FloorplanTab (room/seat editor with drag&drop)
-  - StudentsTab (student management)
-  - PlanningTab (weekly assignment interface)
-  - Dialogs and error handling
+- [ ] **Phase 4: GUI Implementation** (Next - Est. 3 hours)
+  - [ ] MainWindow with menu/toolbar/status bar/tabs
+  - [ ] FloorplanTab (canvas, drag&drop, room/seat editor)
+  - [ ] StudentsTab (CRUD operations, search)
+  - [ ] PlanningTab (weekly assignments, auto-assignment)
+  - [ ] Dialogs and error handling
 
-- [ ] **Phase 5: Testing & QA**
-  - Unit tests for all components
-  - Integration testing (layers working together)
-  - E2E testing (full workflows)
-  - Multi-user testing
-  - Bug documentation
+- [ ] **Phase 5: Testing & QA** (Est. 1.5 hours)
+  - [ ] Integration testing (layers working together)
+  - [ ] E2E testing (full workflows)
+  - [ ] Multi-user testing (lock behavior)
+  - [ ] Bug documentation (BUGS.md)
 
-- [ ] **Phase 6: Deployment**
-  - PyInstaller build configuration
-  - Package structure with assets
-  - German user guide
-  - Windows executable creation
+- [ ] **Phase 6: Deployment** (Est. 30 min)
+  - [ ] PyInstaller build configuration
+  - [ ] Package structure with assets
+  - [ ] German user guide (ANLEITUNG.txt)
+  - [ ] Windows executable creation
 
 ## Key Files Reference
 
@@ -219,16 +219,20 @@ See ARCHITECTURE.md section 6 for pseudocode and detailed implementation guide.
 
 See ARCHITECTURE.md section 7 for complete details.
 
-## Next Steps (Phase 2)
+## Next Steps (Phase 4 - GUI Implementation)
 
-1. Create models in models/ directory with dataclass definitions
-2. Implement DataManager for JSON I/O and backup
-3. Implement LockManager for multi-user file locking
-4. Implement UndoManager for undo/redo functionality
-5. Write unit tests for each data module
-6. Document any deviations from ARCHITECTURE.md
+1. Implement MainWindow with Tkinter menu, toolbar, and status bar
+2. Implement FloorplanTab with canvas for visual room/seat editing
+3. Implement StudentsTab for student management (CRUD)
+4. Implement PlanningTab for weekly assignment planning
+5. Connect GUI to data layer (DataManager, LockManager, UndoManager)
+6. Connect GUI to logic layer (AssignmentEngine, Validator, PdfExporter)
+7. Write integration tests for GUI-Logic-Data layer interactions
+8. Implement dialogs for room/seat properties and confirmations
 
 All implementation must follow the specifications in ARCHITECTURE.md. If deviations are necessary, update ARCHITECTURE.md first and document the reason.
+
+**Phase 3 Summary:** See PHASE3_SUMMARY.md for complete implementation details, test results, and integration points.
 
 ## Communication
 
