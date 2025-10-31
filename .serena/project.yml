@@ -1,0 +1,27 @@
+project_name: Sitzplatzverwalter
+language: python
+description: Desktop application for managing student seating assignments
+
+# Source directories
+source_directories:
+  - "."
+  - "models"
+  - "data"
+  - "logic"
+  - "gui"
+  - "tests"
+
+# Exclude patterns
+exclude_patterns:
+  - "*.lock"
+  - "backups/*"
+  - "assets/*"
+  - "__pycache__/*"
+  - "*.pyc"
+  - ".git/*"
+
+# Python version
+python_version: "3.9"
+
+# Main entry point
+entry_point: "main.py"
