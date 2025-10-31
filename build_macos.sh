@@ -26,7 +26,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="${SCRIPT_DIR}/build"
 DIST_DIR="${SCRIPT_DIR}/dist"
 APP_BUNDLE="${DIST_DIR}/${PROJECT_NAME}.app"
-PYTHON_VERSION="3.9"
+PYTHON_VERSION="3.13"
+
+# Use Python 3.13 from Homebrew (which has tkinter)
+PYTHON_BIN="/opt/homebrew/opt/python@3.13/bin/python3.13"
 
 # Functions
 log_info() {
@@ -45,18 +48,18 @@ check_requirements() {
     log_info "Checking system requirements..."
 
     # Check Python version
-    if ! command -v python3 &> /dev/null; then
-        log_error "Python 3 is not installed"
+    if ! command -v "$PYTHON_BIN" &> /dev/null; then
+        log_error "Python 3.13 is not installed at $PYTHON_BIN"
         exit 1
     fi
 
-    PYTHON_VERSION_INSTALLED=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    PYTHON_VERSION_INSTALLED=$("$PYTHON_BIN" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
     log_info "Python version: $PYTHON_VERSION_INSTALLED"
 
     # Check for required packages
-    python3 -c "import py2app" 2>/dev/null || {
+    "$PYTHON_BIN" -c "import py2app" 2>/dev/null || {
         log_warn "py2app not installed. Installing dependencies..."
-        pip3 install -r requirements.txt
+        "$PYTHON_BIN" -m pip install -r requirements.txt
     }
 
     log_info "All requirements met ✓"
@@ -94,7 +97,7 @@ build_app() {
     cd "${SCRIPT_DIR}"
 
     log_info "Running py2app build..."
-    python3 setup.py py2app
+    "$PYTHON_BIN" setup.py py2app
 
     if [ ! -d "${APP_BUNDLE}" ]; then
         log_error "App bundle creation failed"

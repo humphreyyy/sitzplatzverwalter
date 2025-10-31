@@ -44,7 +44,9 @@ class MainWindow:
         self.root.configure(bg=COLOR_LIGHT)
 
         # Initialize data layer
-        self.data_manager = DataManager(DATA_FILE)
+        # Use current working directory for data files (or parent directory if in app bundle)
+        data_dir = Path.cwd()
+        self.data_manager = DataManager(str(data_dir))
         self.lock_manager = LockManager()
         self.undo_manager = UndoManager()
 

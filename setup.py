@@ -53,12 +53,15 @@ OPTIONS = {
         "excludes": [
             "pytest",
             "unittest",
-            "email",
-            "html",
-            "http",
-            "urllib",
             "asyncio",
+            "matplotlib",
+            "scipy",
+            "numpy",
+            "_tkinter",
         ],
+
+        # Semi-standalone mode - use system frameworks
+        "semi_standalone": True,
 
         # Data files (assets, templates, etc.)
         "resources": [
