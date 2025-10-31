@@ -30,7 +30,8 @@ class FloorplanTab:
         parent: tk.Frame,
         data_manager: DataManager,
         undo_manager: UndoManager,
-        main_window: Any
+        main_window: Any,
+        current_data: Dict[str, Any]
     ) -> None:
         """Initialize the FloorplanTab.
 
@@ -39,11 +40,13 @@ class FloorplanTab:
             data_manager: Data manager instance
             undo_manager: Undo manager instance
             main_window: Reference to main window for callbacks
+            current_data: Current application data dictionary
         """
         self.parent = parent
         self.data_manager = data_manager
         self.undo_manager = undo_manager
         self.main_window = main_window
+        self.current_data = current_data
 
         # Canvas state
         self.canvas: Optional[tk.Canvas] = None
@@ -162,7 +165,7 @@ class FloorplanTab:
         room_name = simpledialog.askstring("New Room", "Enter room name:")
         if room_name:
             try:
-                data = self.data_manager.get_data()
+                data = self.current_data
                 rooms = data.get("floorplan", {}).get("rooms", [])
 
                 new_room = {
@@ -179,7 +182,7 @@ class FloorplanTab:
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status(f"Room added: {room_name}")
@@ -196,7 +199,7 @@ class FloorplanTab:
             seat_number = simpledialog.askinteger("Seat Number", "Enter seat number:")
             if seat_number:
                 try:
-                    data = self.data_manager.get_data()
+                    data = self.current_data
                     seats = data.get("floorplan", {}).get("seats", [])
 
                     new_seat = {
@@ -212,7 +215,7 @@ class FloorplanTab:
 
                     # Save state for undo
                     self.undo_manager.push_state(data)
-                    self.data_manager.save_data()
+                    self.data_manager.save_data(self.current_data)
 
                     self.refresh()
                     self.main_window._update_status(f"Seat {seat_number} added")
@@ -301,7 +304,7 @@ class FloorplanTab:
                 )
                 if room_name:
                     try:
-                        data = self.data_manager.get_data()
+                        data = self.current_data
                         rooms = data.get("floorplan", {}).get("rooms", [])
 
                         new_room = {
@@ -318,7 +321,7 @@ class FloorplanTab:
 
                         # Save state for undo
                         self.undo_manager.push_state(data)
-                        self.data_manager.save_data()
+                        self.data_manager.save_data(self.current_data)
 
                         self.refresh()
                         self.main_window._update_status(f"Raum hinzugefügt: {room_name}")
@@ -335,10 +338,10 @@ class FloorplanTab:
         elif self.current_mode == MODE_SELECT and self.selected_object and self.drag_start:
             # Save position changes for moved object
             try:
-                data = self.data_manager.get_data()
+                data = self.current_data
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
                 self.main_window._update_status("Objekt verschoben")
             except Exception as e:
                 logger.error(f"Error saving position: {e}")
@@ -387,7 +390,7 @@ class FloorplanTab:
         Returns:
             Object dict or None
         """
-        data = self.data_manager.get_data()
+        data = self.current_data
 
         # Check rooms
         rooms = data.get("floorplan", {}).get("rooms", [])
@@ -413,7 +416,7 @@ class FloorplanTab:
         """
         if messagebox.askyesno("Delete", f"Delete {obj.get('name', obj.get('number'))}?"):
             try:
-                data = self.data_manager.get_data()
+                data = self.current_data
 
                 if "name" in obj:  # Room
                     rooms = data.get("floorplan", {}).get("rooms", [])
@@ -424,7 +427,7 @@ class FloorplanTab:
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status("Object deleted")
@@ -505,7 +508,7 @@ class FloorplanTab:
             # Load and display background image
             self._load_background_image()
 
-            data = self.data_manager.get_data()
+            data = self.current_data
 
             # Draw rooms
             rooms = data.get("floorplan", {}).get("rooms", [])

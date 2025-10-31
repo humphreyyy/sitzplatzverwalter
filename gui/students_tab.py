@@ -23,7 +23,8 @@ class StudentsTab:
         parent: tk.Frame,
         data_manager: DataManager,
         undo_manager: UndoManager,
-        main_window: Any
+        main_window: Any,
+        current_data: Dict[str, Any]
     ) -> None:
         """Initialize the StudentsTab.
 
@@ -32,11 +33,13 @@ class StudentsTab:
             data_manager: Data manager instance
             undo_manager: Undo manager instance
             main_window: Reference to main window for callbacks
+            current_data: Current application data dictionary
         """
         self.parent = parent
         self.data_manager = data_manager
         self.undo_manager = undo_manager
         self.main_window = main_window
+        self.current_data = current_data
 
         # UI components
         self.tree_view: Optional[ttk.Treeview] = None
@@ -123,7 +126,7 @@ class StudentsTab:
 
         if dialog.result:
             try:
-                data = self.data_manager.get_data()
+                data = self.current_data
                 students = data.get("students", [])
 
                 new_student = {
@@ -143,7 +146,7 @@ class StudentsTab:
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status(f"Student added: {new_student['name']}")
@@ -165,7 +168,7 @@ class StudentsTab:
 
         if messagebox.askyesno("Delete", f"Delete student '{student_name}'?"):
             try:
-                data = self.data_manager.get_data()
+                data = self.current_data
                 student_id = self.tree_view.item(item)["values"][0]
                 students = data.get("students", [])
                 students[:] = [s for s in students if s["id"] != student_id]
@@ -173,7 +176,7 @@ class StudentsTab:
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status(f"Student deleted: {student_name}")
@@ -202,7 +205,7 @@ class StudentsTab:
             student_id: ID of student to edit
         """
         try:
-            data = self.data_manager.get_data()
+            data = self.current_data
             students = data.get("students", [])
             student = next((s for s in students if s["id"] == student_id), None)
 
@@ -218,7 +221,7 @@ class StudentsTab:
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status(f"Student updated: {student['name']}")
@@ -237,7 +240,7 @@ class StudentsTab:
             self.tree_view.delete(item)
 
         try:
-            data = self.data_manager.get_data()
+            data = self.current_data
             students = data.get("students", [])
 
             # Filter and display students

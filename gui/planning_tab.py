@@ -26,7 +26,8 @@ class PlanningTab:
         parent: tk.Frame,
         data_manager: DataManager,
         undo_manager: UndoManager,
-        main_window: Any
+        main_window: Any,
+        current_data: Dict[str, Any]
     ) -> None:
         """Initialize the PlanningTab.
 
@@ -35,11 +36,13 @@ class PlanningTab:
             data_manager: Data manager instance
             undo_manager: Undo manager instance
             main_window: Reference to main window for callbacks
+            current_data: Current application data dictionary
         """
         self.parent = parent
         self.data_manager = data_manager
         self.undo_manager = undo_manager
         self.main_window = main_window
+        self.current_data = current_data
 
         # UI components
         self.week_var = tk.StringVar()
@@ -48,7 +51,6 @@ class PlanningTab:
         self.statistics_label: Optional[tk.Label] = None
 
         # Create GUI
-        self._create_widgets()
 
     def _create_widgets(self) -> None:
         """Create the tab widgets."""
@@ -137,7 +139,7 @@ class PlanningTab:
                 messagebox.showerror("Error", "Please enter a week (e.g., 2025-W43)")
                 return
 
-            data = self.data_manager.get_data()
+            data = self.current_data
 
             # Get students and seats
             students = data.get("students", [])
@@ -206,13 +208,13 @@ class PlanningTab:
                 return
 
             if messagebox.askyesno("Confirm", f"Clear all assignments for week {week}?"):
-                data = self.data_manager.get_data()
+                data = self.current_data
                 if "assignments" in data and week in data["assignments"]:
                     del data["assignments"][week]
 
                 # Save state for undo
                 self.undo_manager.push_state(data)
-                self.data_manager.save_data()
+                self.data_manager.save_data(self.current_data)
 
                 self.refresh()
                 self.main_window._update_status(f"Assignments cleared for week {week}")
@@ -226,7 +228,7 @@ class PlanningTab:
         """Refresh the assignment display for the selected week."""
         try:
             week = self.week_var.get().strip()
-            data = self.data_manager.get_data()
+            data = self.current_data
 
             # Get students and seats for lookup
             students = {s["id"]: s for s in data.get("students", [])}

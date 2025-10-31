@@ -35,10 +35,13 @@ class DataManager:
         self.backup_dir = self.data_dir / BACKUP_DIR
 
         # Create backup directory if it doesn't exist
-        self.backup_dir.mkdir(exist_ok=True)
+        self.backup_dir.mkdir(parents=True, exist_ok=True)
 
-    def load_data(self) -> Dict[str, Any]:
+    def load_data(self, file_path: Optional[str] = None) -> Dict[str, Any]:
         """Load data from JSON file.
+
+        Args:
+            file_path: Optional path to load from (defaults to self.data_file)
 
         Returns:
             Dictionary containing application data
@@ -47,19 +50,26 @@ class DataManager:
             FileNotFoundError: If data file doesn't exist
             json.JSONDecodeError: If JSON is malformed
         """
+        file_to_load = Path(file_path) if file_path else self.data_file
+
         try:
-            if not self.data_file.exists():
-                logger.info(f"Data file not found at {self.data_file}, creating new data")
+            if not file_to_load.exists():
+                logger.info(f"Data file not found at {file_to_load}, creating new data")
                 return self._create_empty_data()
 
-            with open(self.data_file, 'r', encoding='utf-8') as f:
+            with open(file_to_load, 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
-            logger.info(f"Loaded data from {self.data_file}")
+            logger.info(f"Loaded data from {file_to_load}")
+            
+            # If a new file was loaded, update the manager's default path
+            if file_path:
+                self.data_file = file_to_load
+                
             return data
 
         except json.JSONDecodeError as e:
-            logger.error(f"JSON decode error in {self.data_file}: {e}")
+            logger.error(f"JSON decode error in {file_to_load}: {e}")
             self._backup_corrupt_file()
             raise
 
@@ -67,32 +77,39 @@ class DataManager:
             logger.error(f"Error loading data: {e}")
             raise
 
-    def save_data(self, data: Dict[str, Any], create_backup: bool = True) -> None:
+    def save_data(self, data: Dict[str, Any], file_path: Optional[str] = None, create_backup: bool = True) -> None:
         """Save data to JSON file with optional backup.
 
         Args:
             data: Data dictionary to save
+            file_path: Optional path to save to (defaults to self.data_file)
             create_backup: Whether to create backup before saving
 
         Raises:
             IOError: If save operation fails
         """
+        file_to_save = Path(file_path) if file_path else self.data_file
+
         try:
-            if create_backup and self.data_file.exists():
+            if create_backup and file_to_save.exists():
                 self.backup_data()
 
             # Ensure directory exists
-            self.data_dir.mkdir(parents=True, exist_ok=True)
+            file_to_save.parent.mkdir(parents=True, exist_ok=True)
 
             # Write to temporary file first (atomic write)
-            temp_file = self.data_file.with_suffix('.tmp')
+            temp_file = file_to_save.with_suffix('.tmp')
             with open(temp_file, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
             # Move temp file to actual file (atomic on most systems)
-            temp_file.replace(self.data_file)
+            temp_file.replace(file_to_save)
 
-            logger.info(f"Saved data to {self.data_file}")
+            # If a new file was saved, update the manager's default path
+            if file_path:
+                self.data_file = file_to_save
+
+            logger.info(f"Saved data to {file_to_save}")
 
         except Exception as e:
             logger.error(f"Error saving data: {e}")
@@ -108,6 +125,9 @@ class DataManager:
             IOError: If backup operation fails
         """
         try:
+            # Ensure backup directory exists
+            self.backup_dir.mkdir(parents=True, exist_ok=True)
+            
             if not self.data_file.exists():
                 logger.warning("No data file to backup")
                 return ""

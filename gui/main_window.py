@@ -54,6 +54,19 @@ class MainWindow:
         self.is_locked = False
         self.lock_user = None
 
+        # --- NEW: Load data into memory ---
+        try:
+            self.current_data = self.data_manager.load_data()
+            logger.info("Initial data loaded successfully.")
+        except Exception as e:
+            logger.error(f"Failed to load initial data: {e}", exc_info=True)
+            messagebox.showerror("Fehler beim Laden", f"Konnte data.json nicht laden: {e}\nEine neue Datei wird erstellt.")
+            self.current_data = self.data_manager._create_empty_data()
+
+        # Push the initial state to the undo manager
+        self.undo_manager.push_state(self.current_data)
+        # --- END NEW ---
+
         # Try to acquire file lock
         self._acquire_lock()
 
@@ -74,7 +87,7 @@ class MainWindow:
     def _acquire_lock(self) -> None:
         """Acquire file lock and switch to read-only mode if locked by another user."""
         try:
-            lock_info = self.lock_manager.acquire_lock()
+            lock_info = self.lock_manager.acquire_lock("default_user@sitzplatz")
             if lock_info is None:
                 self.is_locked = False
                 logger.info("File lock acquired")
@@ -161,21 +174,21 @@ class MainWindow:
         self.floorplan_frame = tk.Frame(self.notebook)
         self.notebook.add(self.floorplan_frame, text=UI_TEXTS["floorplan_tab"])
         self.floorplan_tab = FloorplanTab(
-            self.floorplan_frame, self.data_manager, self.undo_manager, self
+            self.floorplan_frame, self.data_manager, self.undo_manager, self, self.current_data
         )
 
         # StudentsTab
         self.students_frame = tk.Frame(self.notebook)
         self.notebook.add(self.students_frame, text=UI_TEXTS["students_tab"])
         self.students_tab = StudentsTab(
-            self.students_frame, self.data_manager, self.undo_manager, self
+            self.students_frame, self.data_manager, self.undo_manager, self, self.current_data
         )
 
         # PlanningTab
         self.planning_frame = tk.Frame(self.notebook)
         self.notebook.add(self.planning_frame, text=UI_TEXTS["planning_tab"])
         self.planning_tab = PlanningTab(
-            self.planning_frame, self.data_manager, self.undo_manager, self
+            self.planning_frame, self.data_manager, self.undo_manager, self, self.current_data
         )
 
     def _create_status_bar(self) -> None:
@@ -221,8 +234,9 @@ class MainWindow:
 
         if messagebox.askyesno("New File", "Create a new file? Unsaved changes will be lost."):
             try:
-                self.data_manager.create_new_file()
+                self.current_data = self.data_manager._create_empty_data()
                 self.undo_manager.clear()
+                self.undo_manager.push_state(self.current_data)
                 self._refresh_all_tabs()
                 self._update_status("New file created")
                 logger.info("New file created")
@@ -242,8 +256,9 @@ class MainWindow:
         )
         if file_path:
             try:
-                self.data_manager.load_data(file_path)
+                self.current_data = self.data_manager.load_data(file_path)
                 self.undo_manager.clear()
+                self.undo_manager.push_state(self.current_data)
                 self._refresh_all_tabs()
                 self._update_status(f"Opened: {Path(file_path).name}")
                 logger.info(f"File opened: {file_path}")
@@ -258,7 +273,7 @@ class MainWindow:
             return
 
         try:
-            self.data_manager.save_data()
+            self.data_manager.save_data(self.current_data)
             self._update_status(f"{UI_TEXTS['last_saved']}: {self._get_timestamp()}")
             logger.info("File saved")
         except Exception as e:
@@ -278,7 +293,7 @@ class MainWindow:
         )
         if file_path:
             try:
-                self.data_manager.save_data(file_path)
+                self.data_manager.save_data(self.current_data, file_path)
                 self._update_status(f"Saved as: {Path(file_path).name}")
                 logger.info(f"File saved as: {file_path}")
             except Exception as e:
@@ -342,13 +357,17 @@ class MainWindow:
             return
 
         try:
-            self.undo_manager.undo()
-            self._refresh_all_tabs()
-            self._update_status("Change undone")
-            logger.info("Undo performed")
+            new_state = self.undo_manager.undo()
+            if new_state:
+                self.current_data = new_state
+                self._refresh_all_tabs()
+                self._update_status("Change undone")
+                logger.info("Undo performed")
+            else:
+                self._update_status("Nothing to undo")
         except Exception as e:
             logger.error(f"Error undoing: {e}")
-            messagebox.showerror("Error", f"Nothing to undo: {e}")
+            self._update_status(f"Nothing to undo: {e}")
 
     def _redo(self) -> None:
         """Redo the last undone change."""
@@ -357,13 +376,17 @@ class MainWindow:
             return
 
         try:
-            self.undo_manager.redo()
-            self._refresh_all_tabs()
-            self._update_status("Change redone")
-            logger.info("Redo performed")
+            new_state = self.undo_manager.redo()
+            if new_state:
+                self.current_data = new_state
+                self._refresh_all_tabs()
+                self._update_status("Change redone")
+                logger.info("Redo performed")
+            else:
+                self._update_status("Nothing to redo")
         except Exception as e:
             logger.error(f"Error redoing: {e}")
-            messagebox.showerror("Error", f"Nothing to redo: {e}")
+            self._update_status(f"Nothing to redo: {e}")
 
     def _show_about(self) -> None:
         """Show about dialog."""
@@ -390,14 +413,7 @@ class MainWindow:
     def _auto_backup(self) -> None:
         """Perform automatic backup and reschedule."""
         try:
-            # Create backups directory if it doesn't exist
-            Path(BACKUP_DIR).mkdir(exist_ok=True)
-
-            # Backup current data
-            import datetime
-            backup_filename = Path(BACKUP_DIR) / f"backup_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            self.data_manager.backup_data(str(backup_filename))
-
+            self.data_manager.backup_data()
         except Exception as e:
             logger.warning(f"Auto-backup failed: {e}")
 
