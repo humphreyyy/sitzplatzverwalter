@@ -51,15 +51,28 @@ class StudentsTab:
         toolbar = tk.Frame(self.parent, bg=COLOR_PRIMARY, height=40)
         toolbar.pack(side=tk.TOP, fill=tk.X, padx=0, pady=0)
 
+        # Toolbar buttons with proper styling for macOS compatibility
+        button_style = {
+            "bg": COLOR_ACCENT,
+            "fg": "white",
+            "font": ("Helvetica", 12, "bold"),
+            "relief": tk.RAISED,
+            "bd": 2,
+            "activebackground": "#b5181b",
+            "activeforeground": "white",
+            "padx": 10,
+            "pady": 5
+        }
+
         add_btn = tk.Button(
             toolbar, text=UI_TEXTS["add_student"],
-            command=self._add_student, bg=COLOR_ACCENT, fg="white"
+            command=self._add_student, **button_style
         )
         add_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
         delete_btn = tk.Button(
             toolbar, text=UI_TEXTS["delete"],
-            command=self._delete_student, bg=COLOR_ACCENT, fg="white"
+            command=self._delete_student, **button_style
         )
         delete_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
@@ -303,12 +316,24 @@ class StudentDialog:
             self.pattern_vars[day] = var
             tk.Checkbutton(pattern_frame, text=display_name, variable=var).pack(anchor=tk.W)
 
-        # Buttons
+        # Buttons with proper styling for macOS compatibility
         button_frame = tk.Frame(self.dialog)
         button_frame.pack(pady=10)
 
-        tk.Button(button_frame, text=UI_TEXTS["save_button"], command=self._save).pack(side=tk.LEFT, padx=5)
-        tk.Button(button_frame, text=UI_TEXTS["cancel"], command=self.dialog.destroy).pack(side=tk.LEFT, padx=5)
+        dialog_button_style = {
+            "bg": COLOR_ACCENT,
+            "fg": "white",
+            "font": ("Helvetica", 12, "bold"),
+            "relief": tk.RAISED,
+            "bd": 2,
+            "activebackground": "#b5181b",
+            "activeforeground": "white",
+            "padx": 10,
+            "pady": 5
+        }
+
+        tk.Button(button_frame, text=UI_TEXTS["save_button"], command=self._save, **dialog_button_style).pack(side=tk.LEFT, padx=5)
+        tk.Button(button_frame, text=UI_TEXTS["cancel"], command=self.dialog.destroy, **dialog_button_style).pack(side=tk.LEFT, padx=5)
 
     def _save(self) -> None:
         """Save student information."""

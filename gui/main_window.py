@@ -119,22 +119,34 @@ class MainWindow:
         toolbar = tk.Frame(self.root, bg=COLOR_PRIMARY, height=40)
         toolbar.pack(side=tk.TOP, fill=tk.X, padx=0, pady=0)
 
-        # Toolbar buttons
+        # Toolbar buttons with proper styling for macOS compatibility
+        button_style = {
+            "bg": COLOR_ACCENT,
+            "fg": "white",
+            "font": ("Helvetica", 12, "bold"),
+            "relief": tk.RAISED,
+            "bd": 2,
+            "activebackground": "#b5181b",
+            "activeforeground": "white",
+            "padx": 10,
+            "pady": 5
+        }
+
         save_btn = tk.Button(
             toolbar, text=UI_TEXTS["save_button"],
-            command=self._save_file, bg=COLOR_ACCENT, fg="white"
+            command=self._save_file, **button_style
         )
         save_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
         undo_btn = tk.Button(
             toolbar, text=UI_TEXTS["undo"],
-            command=self._undo, bg=COLOR_ACCENT, fg="white"
+            command=self._undo, **button_style
         )
         undo_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
         redo_btn = tk.Button(
             toolbar, text=UI_TEXTS["redo"],
-            command=self._redo, bg=COLOR_ACCENT, fg="white"
+            command=self._redo, **button_style
         )
         redo_btn.pack(side=tk.LEFT, padx=5, pady=5)
 

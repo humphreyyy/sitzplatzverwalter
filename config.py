@@ -28,6 +28,7 @@ DATA_FILE = "data.json"             # Application data file
 LOCK_FILE = "data.lock"             # Multi-user lock file
 BACKUP_DIR = "backups"              # Backup directory name
 ASSETS_DIR = "assets"               # Assets directory name
+FLOORPLAN_IMAGE = "Grundriss.png"   # Floorplan background image
 
 # ============================================================================
 # German Weekday Names
@@ -88,6 +89,8 @@ UI_TEXTS: Dict[str, str] = {
     "save_button": "Speichern",
     "cancel": "Abbrechen",
     "auto_assign": "Automatisch zuteilen",
+    "select_mode": "Auswählen",
+    "draw_room_mode": "Raum zeichnen",
 
     # Properties
     "name": "Name",
@@ -120,6 +123,10 @@ DEFAULT_ROOM_HEIGHT = 300           # Default room height in pixels
 DEFAULT_SEAT_SIZE = 20              # Default seat circle radius in pixels
 DEFAULT_CANVAS_WIDTH = 1000         # Default canvas width
 DEFAULT_CANVAS_HEIGHT = 700         # Default canvas height
+
+# Canvas editing modes
+MODE_SELECT = "select"              # Select/move existing objects
+MODE_DRAW_ROOM = "draw_room"        # Draw new rooms by dragging
 
 # ============================================================================
 # Data Validation Rules

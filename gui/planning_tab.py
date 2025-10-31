@@ -62,16 +62,29 @@ class PlanningTab:
         week_entry = tk.Entry(control_frame, textvariable=self.week_var, width=10)
         week_entry.pack(side=tk.LEFT, padx=5, pady=5)
 
+        # Control buttons with proper styling for macOS compatibility
+        button_style = {
+            "bg": COLOR_ACCENT,
+            "fg": "white",
+            "font": ("Helvetica", 12, "bold"),
+            "relief": tk.RAISED,
+            "bd": 2,
+            "activebackground": "#b5181b",
+            "activeforeground": "white",
+            "padx": 10,
+            "pady": 5
+        }
+
         # Auto-assign button
         auto_assign_btn = tk.Button(
             control_frame, text=UI_TEXTS["auto_assign"],
-            command=self._auto_assign, bg=COLOR_ACCENT, fg="white"
+            command=self._auto_assign, **button_style
         )
         auto_assign_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
         # Clear assignments button
         clear_btn = tk.Button(
-            control_frame, text="Clear", command=self._clear_assignments, bg=COLOR_ACCENT, fg="white"
+            control_frame, text="Clear", command=self._clear_assignments, **button_style
         )
         clear_btn.pack(side=tk.LEFT, padx=5, pady=5)
 
