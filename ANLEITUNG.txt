@@ -1,0 +1,287 @@
+================================================================================
+SITZPLATZ-MANAGER - Benutzerhandbuch
+================================================================================
+
+Version 1.0
+Datum: 31.10.2025
+
+================================================================================
+INHALTSVERZEICHNIS
+================================================================================
+
+1. Willkommen
+2. Systemvoraussetzungen
+3. Installation
+4. Erste Schritte
+5. Grundfunktionen
+6. Tipps & Tricks
+7. Fehlerbehebung
+8. Technischer Support
+
+================================================================================
+1. WILLKOMMEN
+================================================================================
+
+Das Sitzplatz-Manager ist eine Desktop-Anwendung zur Verwaltung von
+Sitzplatzanordnungen in Klassenzimmern. Mit diesem Programm können Sie:
+
+• Klassenzimmer-Grundrisse mit Sitzplätzen verwalten
+• Schülerdaten erfassen und bearbeiten
+• Automatische oder manuelle Sitzplatzzuweisung durchführen
+• Wöchentliche Sitzpläne erstellen und als PDF exportieren
+• Multi-User-Funktionalität mit Dateisperrung nutzen
+• Änderungen rückgängig machen oder wiederherstellen
+
+================================================================================
+2. SYSTEMVORAUSSETZUNGEN
+================================================================================
+
+Minimum-Anforderungen:
+- macOS 10.13 oder höher
+- Keine zusätzliche Software erforderlich
+- ca. 50 MB freier Speicherplatz
+
+Empfohlene Anforderungen:
+- macOS 11 oder höher
+- mindestens 4GB RAM
+- Intel oder Apple Silicon (M1/M2/M3) Mac
+
+================================================================================
+3. INSTALLATION
+================================================================================
+
+WICHTIG: Diese Anwendung ist selbstständig und benötigt keine Installation!
+
+So verwenden Sie die Anwendung:
+
+A) Für macOS:
+   1. Laden Sie "Sitzplatz-Manager.app" herunter
+   2. Doppelklicken Sie auf die Datei (oder ziehen Sie in den Applications-Ordner)
+   3. Bei der ersten Ausführung müssen Sie möglicherweise die
+      Sicherheitsbestätigung geben (Systemeinstellungen > Sicherheit)
+   4. Die Anwendung startet
+
+Ordnerstruktur:
+   Sitzplatz-Manager.app/        # Die Anwendung
+   ANLEITUNG.txt                 # Diese Datei
+   README.md                      # Technische Informationen
+
+================================================================================
+4. ERSTE SCHRITTE
+================================================================================
+
+A) Beim ersten Start:
+
+   1. Die Anwendung erstellt automatisch eine Datei "data.json"
+      mit den notwendigen Standarddaten
+   2. Der Bildschirm wird in drei Reiter unterteilt:
+      - Grundriss: Zum Zeichnen des Klassenzimmers
+      - Schüler: Zum Verwalten von Schülerdaten
+      - Planung: Zum Erstellen von Sitzplänen
+
+B) Grundriss erstellen:
+
+   1. Gehen Sie zum Reiter "Grundriss"
+   2. Klicken Sie auf "Raum hinzufügen"
+   3. Zeichnen Sie einen Raum mit der Maus
+   4. Klicken Sie auf "Sitz hinzufügen" und platzieren Sie Sitze
+   5. Speichern Sie mit Ctrl+S (oder Cmd+S)
+
+C) Schüler hinzufügen:
+
+   1. Gehen Sie zum Reiter "Schüler"
+   2. Klicken Sie auf "Schüler hinzufügen"
+   3. Geben Sie den Namen ein
+   4. Legen Sie Wochentage fest (wann ist der Schüler anwesend?)
+   5. Speichern Sie
+
+D) Sitzplan erstellen:
+
+   1. Gehen Sie zum Reiter "Planung"
+   2. Wählen Sie eine Woche aus
+   3. Wählen Sie einen Wochentag
+   4. Klicken Sie auf "Automatisch zuteilen" ODER
+   5. Ordnen Sie Schüler manuell zu
+   6. Exportieren Sie als PDF (optional)
+
+================================================================================
+5. GRUNDFUNKTIONEN
+================================================================================
+
+A) Menüleiste:
+
+   Datei:
+   - Neu: Neue Datei erstellen
+   - Öffnen: Bestehendes Projekt öffnen
+   - Speichern: Änderungen speichern (Cmd+S)
+   - Exportieren: Aktuellen Plan als PDF speichern
+   - Beenden: Anwendung schließen (Cmd+Q)
+
+   Bearbeiten:
+   - Rückgängig: Letzte Aktion rückgängig machen (Cmd+Z)
+   - Wiederherstellen: Rückgängig gemachte Aktion wiederherstellen (Cmd+Y)
+
+   Hilfe:
+   - Über: Versionsinformationen anzeigen
+   - Anleitung: Dieses Benutzerhandbuch öffnen
+
+B) Reiter "Grundriss":
+
+   - Raum hinzufügen: Neuen Klassenraum erstellen
+   - Sitz hinzufügen: Sitzplatz in den markierten Raum einfügen
+   - Bearbeiten: Eigenschaften eines Objekts ändern (Doppelklick)
+   - Löschen: Objekt entfernen (Rechtsklick > Löschen)
+   - Speichern: Grundriss sichern
+
+C) Reiter "Schüler":
+
+   - Schüler hinzufügen: Neue Schülerdatei erstellen
+   - Schüler bearbeiten: Daten ändern (Doppelklick auf Schüler)
+   - Schüler löschen: Schüler aus der Liste entfernen
+   - Suche: Schüler nach Name suchen
+   - Speichern: Änderungen sichern
+
+D) Reiter "Planung":
+
+   - Wochenauswahl: Wählen Sie die Schulwoche
+   - Wochentagsreiter: Mo-Fr (oder Mo-So)
+   - Automatisch zuteilen: Intelligente Sitzplatzzuweisung
+   - Manuelle Zuweisung: Drag & Drop zum Platzieren
+   - Konflikt-Anzeige: Zeigt unbesetzte oder problematische Sitze
+   - PDF-Export: Plan als PDF speichern
+
+================================================================================
+6. TIPPS & TRICKS
+================================================================================
+
+A) Effiziente Benutzung:
+
+   1. Speichern Sie nach größeren Änderungen (Cmd+S)
+   2. Nutzen Sie Rückgängig/Wiederherstellen für Experimente
+   3. Benennen Sie Räume aussagekräftig (z.B. "Klassenzimmer A")
+   4. Verwenden Sie die Automatische Zuweisung als Startpunkt
+   5. Passen Sie dann manuell an
+
+B) Wöchentliche Muster:
+
+   Sie können für jeden Schüler ein Wochenmuster einstellen:
+   - Montag-Freitag (Mo-Fr, Standard)
+   - Täglich (Mo-So)
+   - Nur bestimmte Tage (z.B. nur Mo, Mi, Fr)
+
+C) Anforderungen:
+
+   Schüler können spezielle Anforderungen haben:
+   - "Fensterplatz": Nähe zum Fenster
+   - "Tafel": Nähe zur Tafel
+   - "Ruhe": Abseits von lauten Schülern
+
+D) PDF-Export:
+
+   Der Export erzeugt einen professionellen PDF mit:
+   - Wöchentlicher Übersicht
+   - Täglichen Sitzplänen
+   - Statistiken
+   - Deutsche Formatierung
+
+E) Mehrbenutzer:
+
+   Falls mehrere Personen arbeiten:
+   1. Eine Person öffnet die Datei
+   2. Andere sehen eine Benachrichtigung (Datei gesperrt)
+   3. Bei Inaktivität (1 Stunde) wird die Sperre automatisch freigegeben
+
+================================================================================
+7. FEHLERBEHEBUNG
+================================================================================
+
+Problem: Die Anwendung lässt sich nicht öffnen
+Lösung:  1. Versuchen Sie Rechtsklick > Öffnen
+         2. Gehen Sie zu Systemeinstellungen > Sicherheit > Allgemein
+         3. Erlauben Sie die Anwendung von diesem Entwickler
+         4. Starten Sie neu
+
+Problem: Die Datei wird als "gesperrt" angezeigt
+Lösung:  1. Überprüfen Sie, ob jemand das Programm noch nutzt
+         2. Warten Sie etwa 1 Stunde oder
+         3. Beenden Sie die Anwendung bei dem anderen Benutzer
+         4. Löschen Sie die Datei "data.lock" im Programmordner
+
+Problem: Änderungen werden nicht gespeichert
+Lösung:  1. Drücken Sie Cmd+S um manuell zu speichern
+         2. Überprüfen Sie die Berechtigungen des Ordners
+         3. Stellen Sie sicher, dass die Festplatte nicht voll ist
+
+Problem: Die Anwendung reagiert nicht
+Lösung:  1. Beenden Sie die Anwendung (Cmd+Q)
+         2. Warten Sie 10 Sekunden
+         3. Starten Sie sie neu
+         4. Falls Daten verloren gingen, schauen Sie in den "backups" Ordner
+
+Problem: PDF-Export funktioniert nicht
+Lösung:  1. Überprüfen Sie Schreibrechte im Ordner
+         2. Stellen Sie sicher, dass Sie über 50 MB freien Speicher haben
+         3. Versuchen Sie, einen anderen Ordner zum Speichern zu wählen
+
+Problem: Schüler können nicht hinzugefügt werden
+Lösung:  1. Überprüfen Sie, dass ein Klassenzimmer mit Sitzen vorhanden ist
+         2. Stellen Sie sicher, dass der Schülername nicht bereits existiert
+         3. Versuchen Sie, die Änderungen zu speichern
+
+================================================================================
+8. TECHNISCHER SUPPORT
+================================================================================
+
+Weitere Informationen:
+
+   README.md        - Technische Dokumentation
+   BUGS.md          - Bekannte Probleme
+   TEST_REPORT.md   - Test-Ergebnisse
+
+Datenverzeichnis:
+
+   Die Anwendung speichert Daten in:
+   - data.json          (Hauptdatendatei)
+   - data.lock          (Mehrbenutzer-Sperre)
+   - backups/           (Automatische Sicherungen)
+
+Sicherung:
+
+   Die Anwendung erstellt automatisch alle 5 Minuten eine Sicherung.
+   Falls etwas schiefgeht, finden Sie Ihre Daten im "backups" Ordner.
+
+Daten löschen:
+
+   Um völlig von vorne zu beginnen:
+   1. Schließen Sie die Anwendung
+   2. Löschen Sie "data.json"
+   3. Löschen Sie "data.lock" (falls vorhanden)
+   4. Löschen Sie den "backups" Ordner (optional)
+   5. Starten Sie die Anwendung neu
+
+================================================================================
+LIZENZ UND RECHTLICHES
+================================================================================
+
+Sitzplatz-Manager Version 1.0
+Entwickelt für Schulverwaltung und Klassenmanagement
+© 2025 Sitzplatz Team
+
+Die Anwendung wird ohne Garantie bereitgestellt.
+
+================================================================================
+VERSIONSVERLAUF
+================================================================================
+
+v1.0 (31.10.2025)
+- Initiale Release
+- Grundriss-Verwaltung
+- Schüler-Verwaltung
+- Automatische Sitzplatzzuweisung
+- PDF-Export
+- Multi-User-Unterstützung
+- macOS-Build
+
+================================================================================
+EOF
+================================================================================
